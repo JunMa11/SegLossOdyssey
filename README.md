@@ -1,4 +1,4 @@
-# SegLoss
+# Loss functions for image segmentation
 A collection of loss functions for medical image segmentation
 
 |Date|First Author|Title|Conference/Journal|
