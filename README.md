@@ -3,9 +3,11 @@ A collection of loss functions for medical image segmentation
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|201906|Xu Chen|Learning Active Contour Models for Medical Image Segmentation [(paper)](http://openaccess.thecvf.com/content_CVPR_2019/papers/Chen_Learning_Active_Contour_Models_for_Medical_Image_Segmentation_CVPR_2019_paper.pdf) [(code)](https://github.com/xuuuuuuchen/Active-Contour-Loss/blob/master/Active-Contour-Loss.py)|CVPR 2019|
 |20190422|Davood Karimi|Reducing the **Hausdorff Distance** in Medical Image Segmentation with Convolutional Neural Networks [(paper)](https://arxiv.org/abs/1904.10030v1#)|arxiv|
 |20190417|Francesco Caliva|**Distance Map Loss** Penalty Term for Semantic Segmentation [(paper)](https://openreview.net/forum?id=B1eIcvS45V)|[MIDL 2019](http://2019.midl.io/)|
 |20190411|Su Yang|Major Vessel Segmentation on X-ray Coronary Angiography using Deep Networks with a Novel **Penalty Loss Function** [(paper)](https://openreview.net/forum?id=H1lTh8unKN)|[MIDL 2019](http://2019.midl.io/)|
+|20190405|Boah Kim|Multiphase Level-Set Loss for Semi-Supervised and Unsupervised Segmentation with Deep Learning [(arxiv)](https://arxiv.org/abs/1904.02872)|TBD|
 |201901|[Seyed Raein Hashemi](https://scholar.google.ca/citations?user=4VEP0fsAAAAJ&hl=en&oi=sra)|**Asymmetric Loss** Functions and Deep Densely Connected Networks for Highly Imbalanced Medical Image Segmentation: Application to Multiple Sclerosis Lesion Detection [(paper)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8573779)|IEEE Access|
 |201812|[Hoel Kervadec](https://scholar.google.ca/citations?user=yeFGhfgAAAAJ&hl=zh-CN&oi=sra)|**Boundary loss** for highly unbalanced segmentation [(paper)](https://arxiv.org/abs/1812.07032), [(pytorch 1.0 code)](https://github.com/LIVIAETS/surface-loss)|[MIDL 2019](http://2019.midl.io/)|
 |201810|[Nabila Abraham](https://scholar.google.ca/citations?user=OOvooSMAAAAJ&hl=zh-CN&oi=sra)|A Novel **Focal Tversky loss** function with improved Attention U-Net for lesion segmentation [(paper)](https://arxiv.org/abs/1810.07842) [(code)](https://github.com/nabsabraham/focal-tversky-unet)|[ISBI 2019](https://biomedicalimaging.org/2019/)|
