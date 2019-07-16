@@ -17,6 +17,7 @@ from nnunet.utilities.nd_softmax import softmax_helper
 from nnunet.training.loss_functions.ND_Crossentropy import CrossentropyND
 from nnunet.utilities.tensor_utilities import sum_tensor
 from torch import nn
+from torch.autograd import Variable
 
 
 def get_tp_fp_fn(net_output, gt, axes=None, mask=None, square=False):
@@ -72,6 +73,132 @@ def get_tp_fp_fn(net_output, gt, axes=None, mask=None, square=False):
     return tp, fp, fn
 
 
+class GDiceLoss(nn.Module):
+    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
+                 square=False):
+        """
+        Generalized Dice;
+        Ignoring background
+        """
+        super(GDiceLoss, self).__init__()
+
+        self.square = square
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+
+    def forward(self, net_output, gt, loss_mask=None):
+        shp_x = net_output.shape
+        shp_y = gt.shape
+        # class_num = shp_x[1]
+        
+        with torch.no_grad():
+            if len(shp_x) != len(shp_y):
+                gt = gt.view((shp_y[0], 1, *shp_y[1:]))
+
+            if all([i == j for i, j in zip(net_output.shape, gt.shape)]):
+                # if this is the case then gt is probably already a one hot encoding
+                y_onehot = gt
+            else:
+                gt = gt.long()
+                y_onehot = torch.zeros(shp_x)
+                if net_output.device.type == "cuda":
+                    y_onehot = y_onehot.cuda(net_output.device.index)
+                y_onehot.scatter_(1, gt, 1)
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            softmax_output = self.apply_nonlin(net_output)
+        
+        tp = softmax_output * y_onehot
+        tp = sum_tensor(tp, axes, keepdim=False)
+        # tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)
+        gt_sum = sum_tensor(y_onehot, axes, keepdim=False)
+        class_weights = Variable(1. / (gt_sum * gt_sum).clamp(min=self.smooth), requires_grad=False)
+
+        intersect = (2. * tp *class_weights + self.smooth).sum(-1)
+        denominator = ((softmax_output + y_onehot).sum(axes, keepdim=False) * class_weights).sum(-1)
+        gdc = 1. - intersect / denominator.clamp(min=self.smooth)
+        gdc = gdc.mean()
+        # print("intersect: ", intersect.cpu().detach().numpy())
+        # print("denominator: ", denominator.cpu().detach().numpy())
+        # print("gdc", intersect.cpu().detach().numpy()/denominator.cpu().detach().numpy())
+
+        # if not self.do_bg:
+        #     if self.batch_dice:
+        #         gdc = gdc[1:]
+        #     else:
+        #         gdc = gdc[:, 1:]
+
+        return gdc
+
+
+class SSLoss(nn.Module):
+    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
+                 square=False):
+        """
+
+        """
+        super(SSLoss, self).__init__()
+
+        self.square = square
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+        self.r = 0.1 # weight parameter in SS paper
+
+    def forward(self, net_output, gt, loss_mask=None):
+        shp_x = net_output.shape
+        shp_y = gt.shape
+        # class_num = shp_x[1]
+        
+        with torch.no_grad():
+            if len(shp_x) != len(shp_y):
+                gt = gt.view((shp_y[0], 1, *shp_y[1:]))
+
+            if all([i == j for i, j in zip(net_output.shape, gt.shape)]):
+                # if this is the case then gt is probably already a one hot encoding
+                y_onehot = gt
+            else:
+                gt = gt.long()
+                y_onehot = torch.zeros(shp_x)
+                if net_output.device.type == "cuda":
+                    y_onehot = y_onehot.cuda(net_output.device.index)
+                y_onehot.scatter_(1, gt, 1)
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            softmax_output = self.apply_nonlin(net_output)
+        
+        # no object value
+        bg_onehot = 1 - y_onehot
+        squared_error = (y_onehot - softmax_output)**2
+        specificity_part = sum_tensor(squared_error*y_onehot, axes)/(sum_tensor(y_onehot, axes)+self.smooth)
+        sensitivity_part = sum_tensor(squared_error*bg_onehot, axes)/(sum_tensor(bg_onehot, axes)+self.smooth)
+
+        ss = self.r * specificity_part + (1-self.r) * sensitivity_part
+
+        if not self.do_bg:
+            if self.batch_dice:
+                ss = ss[1:]
+            else:
+                ss = ss[:, 1:]
+        ss = ss.mean()
+
+        return ss
+
+
+
 class SoftDiceLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
@@ -110,6 +237,128 @@ class SoftDiceLoss(nn.Module):
 
         return -dc
 
+class IoULoss(nn.Module):
+    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
+                 square=False):
+        """
+
+        """
+        super(IoULoss, self).__init__()
+
+        self.square = square
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+
+    def forward(self, x, y, loss_mask=None):
+        shp_x = x.shape
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            x = self.apply_nonlin(x)
+
+        tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)
+
+
+        iou = (tp + self.smooth) / (tp + fp + fn + self.smooth)
+
+        if not self.do_bg:
+            if self.batch_dice:
+                iou = iou[1:]
+            else:
+                iou = iou[:, 1:]
+        iou = iou.mean()
+
+        return -iou
+
+class TverskyLoss(nn.Module):
+    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
+                 square=False):
+        """
+
+        """
+        super(TverskyLoss, self).__init__()
+
+        self.square = square
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+        self.alpha = 0.3
+        self.beta = 0.7
+
+    def forward(self, x, y, loss_mask=None):
+        shp_x = x.shape
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            x = self.apply_nonlin(x)
+
+        tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)
+
+
+        tversky = (tp + self.smooth) / (tp + self.alpha*fp + self.beta*fn + self.smooth)
+
+        if not self.do_bg:
+            if self.batch_dice:
+                tversky = tversky[1:]
+            else:
+                tversky = tversky[:, 1:]
+        tversky = tversky.mean()
+
+        return -tversky
+
+class AsymLoss(nn.Module):
+    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
+                 square=False):
+        """
+
+        """
+        super(AsymLoss, self).__init__()
+
+        self.square = square
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+        self.beta = 1.5
+
+    def forward(self, x, y, loss_mask=None):
+        shp_x = x.shape
+        print("pred shape: ", x.shape, "gt.shape: ", y.shape)
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            x = self.apply_nonlin(x)
+
+        tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)# shape: (batch size, class num)
+        print("tp, fp, fn shape: ", tp.shape, fp.shape, fn.shape)
+        weight = (self.beta**2)/(1+self.beta**2)
+        asym = (tp + self.smooth) / (tp + weight*fn + (1-weight)*fp + self.smooth)
+        print("asym.shape: ", asym.shape)
+        print("self.do_bg: ", self.do_bg, ", self.batch_dice: ", self.batch_dice)
+
+        if not self.do_bg:
+            if self.batch_dice:
+                asym = asym[1:]
+            else:
+                asym = asym[:, 1:]
+        asym = asym.mean()
+
+        return -asym
 
 class DC_and_CE_loss(nn.Module):
     def __init__(self, soft_dice_kwargs, ce_kwargs, aggregate="sum"):
@@ -127,6 +376,19 @@ class DC_and_CE_loss(nn.Module):
             raise NotImplementedError("nah son") # reserved for other stuff (later)
         return result
 
+class PenaltyGDiceLoss(nn.Module):
+    def __init__(self, gdice_kwargs):
+        super(PenaltyGDiceLoss, self).__init__()
+        self.k = 2.5
+        self.gdc = GDiceLoss(apply_nonlin=softmax_helper, **gdice_kwargs)
+
+    def forward(self, net_output, target):
+        gdc_loss = self.gdc(net_output, target)
+        penalty_gdc = gdc_loss / (1 + self.k * (1 - gdc_loss))
+
+        return penalty_gdc
+
+        
 
 class DC_and_topk_loss(nn.Module):
     def __init__(self, soft_dice_kwargs, ce_kwargs, aggregate="sum"):
