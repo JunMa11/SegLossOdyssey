@@ -39,9 +39,9 @@ class NetworkTrainer(object):
         - validate
         - predict_test_case
         """
-        np.random.seed(12345)
-        torch.manual_seed(12345)
-        torch.cuda.manual_seed_all(12345)
+        # np.random.seed(12345)
+        # torch.manual_seed(12345)
+        # torch.cuda.manual_seed_all(12345)
         self.fp16 = fp16
 
         if deterministic:
