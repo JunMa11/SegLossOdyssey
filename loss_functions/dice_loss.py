@@ -79,6 +79,8 @@ class GDiceLoss(nn.Module):
         """
         Generalized Dice;
         Ignoring background
+        paper: https://arxiv.org/pdf/1707.03237.pdf
+        tf code: https://github.com/NifTK/NiftyNet/blob/dev/niftynet/layer/loss_segmentation.py#L279
         """
         super(GDiceLoss, self).__init__()
 
@@ -89,10 +91,9 @@ class GDiceLoss(nn.Module):
         self.smooth = smooth
 
     def forward(self, net_output, gt, loss_mask=None):
-        shp_x = net_output.shape
-        shp_y = gt.shape
-        # class_num = shp_x[1]
-        
+        shp_x = net_output.shape # (batch size,class_num,x,y,z)
+        shp_y = gt.shape # (batch size,1,x,y,z)
+        # one hot code for gt
         with torch.no_grad():
             if len(shp_x) != len(shp_y):
                 gt = gt.view((shp_y[0], 1, *shp_y[1:]))
@@ -125,9 +126,6 @@ class GDiceLoss(nn.Module):
         denominator = ((softmax_output + y_onehot).sum(axes, keepdim=False) * class_weights).sum(-1)
         gdc = 1. - intersect / denominator.clamp(min=self.smooth)
         gdc = gdc.mean()
-        # print("intersect: ", intersect.cpu().detach().numpy())
-        # print("denominator: ", denominator.cpu().detach().numpy())
-        # print("gdc", intersect.cpu().detach().numpy()/denominator.cpu().detach().numpy())
 
         # if not self.do_bg:
         #     if self.batch_dice:
@@ -334,7 +332,6 @@ class AsymLoss(nn.Module):
 
     def forward(self, x, y, loss_mask=None):
         shp_x = x.shape
-        print("pred shape: ", x.shape, "gt.shape: ", y.shape)
 
         if self.batch_dice:
             axes = [0] + list(range(2, len(shp_x)))
@@ -345,11 +342,8 @@ class AsymLoss(nn.Module):
             x = self.apply_nonlin(x)
 
         tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)# shape: (batch size, class num)
-        print("tp, fp, fn shape: ", tp.shape, fp.shape, fn.shape)
         weight = (self.beta**2)/(1+self.beta**2)
         asym = (tp + self.smooth) / (tp + weight*fn + (1-weight)*fp + self.smooth)
-        print("asym.shape: ", asym.shape)
-        print("self.do_bg: ", self.do_bg, ", self.batch_dice: ", self.batch_dice)
 
         if not self.do_bg:
             if self.batch_dice:
