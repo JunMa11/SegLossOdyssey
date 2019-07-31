@@ -18,6 +18,7 @@ from nnunet.training.loss_functions.ND_Crossentropy import CrossentropyND
 from nnunet.utilities.tensor_utilities import sum_tensor
 from torch import nn
 from torch.autograd import Variable
+from torch import einsum
 
 
 def get_tp_fp_fn(net_output, gt, axes=None, mask=None, square=False):
@@ -74,23 +75,19 @@ def get_tp_fp_fn(net_output, gt, axes=None, mask=None, square=False):
 
 
 class GDiceLoss(nn.Module):
-    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
-                 square=False):
+    def __init__(self, apply_nonlin=None, smooth=1e-5):
         """
         Generalized Dice;
-        Ignoring background
+        Copy from: https://github.com/LIVIAETS/surface-loss/blob/108bd9892adca476e6cdf424124bc6268707498e/losses.py#L29
         paper: https://arxiv.org/pdf/1707.03237.pdf
         tf code: https://github.com/NifTK/NiftyNet/blob/dev/niftynet/layer/loss_segmentation.py#L279
         """
         super(GDiceLoss, self).__init__()
 
-        self.square = square
-        self.do_bg = do_bg
-        self.batch_dice = batch_dice
         self.apply_nonlin = apply_nonlin
         self.smooth = smooth
 
-    def forward(self, net_output, gt, loss_mask=None):
+    def forward(self, net_output, gt):
         shp_x = net_output.shape # (batch size,class_num,x,y,z)
         shp_y = gt.shape # (batch size,1,x,y,z)
         # one hot code for gt
@@ -108,39 +105,89 @@ class GDiceLoss(nn.Module):
                     y_onehot = y_onehot.cuda(net_output.device.index)
                 y_onehot.scatter_(1, gt, 1)
 
-        if self.batch_dice:
-            axes = [0] + list(range(2, len(shp_x)))
-        else:
-            axes = list(range(2, len(shp_x)))
 
         if self.apply_nonlin is not None:
             softmax_output = self.apply_nonlin(net_output)
-        
-        tp = softmax_output * y_onehot
-        tp = sum_tensor(tp, axes, keepdim=False)
-        # tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)
-        gt_sum = sum_tensor(y_onehot, axes, keepdim=False)
-        class_weights = Variable(1. / (gt_sum * gt_sum).clamp(min=self.smooth), requires_grad=False)
-
-        intersect = (2. * tp *class_weights + self.smooth).sum(-1)
-        denominator = ((softmax_output + y_onehot).sum(axes, keepdim=False) * class_weights).sum(-1)
-        gdc = 1. - intersect / denominator.clamp(min=self.smooth)
-        gdc = gdc.mean()
-
-        # if not self.do_bg:
-        #     if self.batch_dice:
-        #         gdc = gdc[1:]
-        #     else:
-        #         gdc = gdc[:, 1:]
+    
+        # copy from https://github.com/LIVIAETS/surface-loss/blob/108bd9892adca476e6cdf424124bc6268707498e/losses.py#L29
+        w: torch.Tensor = 1 / ((einsum("bcxyz->bc", y_onehot).type(torch.float32) + 1e-10))**2
+        intersection: torch.Tensor = w * einsum("bcxyz, bcxyz->bc", softmax_output, y_onehot)
+        union: torch.Tensor = w * (einsum("bcxyz->bc", softmax_output) + einsum("bcxyz->bc", y_onehot))
+        divided: torch.Tensor = 1 - 2 * (einsum("bc->b", intersection) + self.smooth) / (einsum("bc->b", union) + self.smooth)
+        gdc = divided.mean()
 
         return gdc
+
+
+
+def flatten(tensor):
+    """Flattens a given tensor such that the channel axis is first.
+    The shapes are transformed as follows:
+       (N, C, D, H, W) -> (C, N * D * H * W)
+    """
+    C = tensor.size(1)
+    # new axis order
+    axis_order = (1, 0) + tuple(range(2, tensor.dim()))
+    # Transpose: (N, C, D, H, W) -> (C, N, D, H, W)
+    transposed = tensor.permute(axis_order).contiguous()
+    # Flatten: (C, N, D, H, W) -> (C, N * D * H * W)
+    return transposed.view(C, -1)
+
+class GDiceLossV2(nn.Module):
+    def __init__(self, apply_nonlin=None, smooth=1e-5):
+        """
+        Generalized Dice;
+        Copy from: https://github.com/wolny/pytorch-3dunet/blob/6e5a24b6438f8c631289c10638a17dea14d42051/unet3d/losses.py#L75
+        paper: https://arxiv.org/pdf/1707.03237.pdf
+        tf code: https://github.com/NifTK/NiftyNet/blob/dev/niftynet/layer/loss_segmentation.py#L279
+        """
+        super(GDiceLossV2, self).__init__()
+
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+
+    def forward(self, net_output, gt):
+        shp_x = net_output.shape # (batch size,class_num,x,y,z)
+        shp_y = gt.shape # (batch size,1,x,y,z)
+        # one hot code for gt
+        with torch.no_grad():
+            if len(shp_x) != len(shp_y):
+                gt = gt.view((shp_y[0], 1, *shp_y[1:]))
+
+            if all([i == j for i, j in zip(net_output.shape, gt.shape)]):
+                # if this is the case then gt is probably already a one hot encoding
+                y_onehot = gt
+            else:
+                gt = gt.long()
+                y_onehot = torch.zeros(shp_x)
+                if net_output.device.type == "cuda":
+                    y_onehot = y_onehot.cuda(net_output.device.index)
+                y_onehot.scatter_(1, gt, 1)
+
+
+        if self.apply_nonlin is not None:
+            softmax_output = self.apply_nonlin(net_output)
+
+        input = flatten(softmax_output)
+        target = flatten(y_onehot)
+        target = target.float()
+        target_sum = target.sum(-1)
+        class_weights = Variable(1. / (target_sum * target_sum).clamp(min=self.smooth), requires_grad=False)
+
+        intersect = (input * target).sum(-1) * class_weights
+        intersect = intersect.sum()
+
+        denominator = ((input + target).sum(-1) * class_weights).sum()
+
+        return 1. - 2. * intersect / denominator.clamp(min=self.smooth)
 
 
 class SSLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
         """
-
+        Sensitivity-Specifity loss
+        paper: http://www.rogertam.ca/Brosch_MICCAI_2015.pdf
         """
         super(SSLoss, self).__init__()
 
@@ -239,7 +286,8 @@ class IoULoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
         """
-
+        paper: https://link.springer.com/chapter/10.1007/978-3-319-50835-1_22
+        
         """
         super(IoULoss, self).__init__()
 
@@ -278,7 +326,7 @@ class TverskyLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
         """
-
+        paper: https://arxiv.org/pdf/1706.05721.pdf
         """
         super(TverskyLoss, self).__init__()
 
@@ -319,7 +367,7 @@ class AsymLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
         """
-
+        paper: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8573779
         """
         super(AsymLoss, self).__init__()
 
