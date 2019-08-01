@@ -6,6 +6,7 @@ import torch.nn.functional as F
 
 class FocalLoss(nn.Module):
     """
+    copy from: https://github.com/Hsuxu/Loss_ToolBox-PyTorch/blob/master/FocalLoss/FocalLoss.py
     This is a implementation of Focal Loss with smooth label cross entropy supported which is proposed in
     'Focal Loss for Dense Object Detection. (https://arxiv.org/abs/1708.02002)'
         Focal_Loss= -1*alpha*(1-pt)*log(pt)
@@ -43,23 +44,24 @@ class FocalLoss(nn.Module):
             logit = logit.view(-1, logit.size(-1))
         target = torch.squeeze(target, 1)
         target = target.view(-1, 1)
-        print(logit.shape, target.shape)
-        print('*'*20)
-      
-        if self.alpha is None:
-            self.alpha = torch.ones(num_class, 1)
-        elif isinstance(self.alpha, (list, np.ndarray)):
-            assert len(self.alpha) == num_class
-            self.alpha = torch.FloatTensor(alpha).view(num_class, 1)
-            self.alpha = self.alpha / self.alpha.sum()
-        elif isinstance(self.alpha, float):
+        # print(logit.shape, target.shape)
+        # 
+        alpha = self.alpha
+
+        if alpha is None:
+            alpha = torch.ones(num_class, 1)
+        elif isinstance(alpha, (list, np.ndarray)):
+            assert len(alpha) == num_class
+            alpha = torch.FloatTensor(alpha).view(num_class, 1)
+            alpha = alpha / alpha.sum()
+        elif isinstance(alpha, float):
             alpha = torch.ones(num_class, 1)
             alpha = alpha * (1 - self.alpha)
             alpha[self.balance_index] = self.alpha
-            self.alpha = alpha
+
         else:
             raise TypeError('Not support alpha type')
-        alpha = self.alpha
+        
         if alpha.device != logit.device:
             alpha = alpha.to(logit.device)
 
@@ -79,7 +81,7 @@ class FocalLoss(nn.Module):
         gamma = self.gamma
 
         alpha = alpha[idx]
-        print(alpha)
+        alpha = torch.squeeze(alpha)
         loss = -1 * alpha * torch.pow((1 - pt), gamma) * logpt
 
         if self.size_average:
