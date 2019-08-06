@@ -14,7 +14,7 @@
 import torch
 from nnunet.training.loss_functions.TopK_loss import TopKLoss
 from nnunet.utilities.nd_softmax import softmax_helper
-from nnunet.training.loss_functions.ND_Crossentropy import CrossentropyND
+from nnunet.training.loss_functions.ND_Crossentropy import CrossentropyND, WeightedCrossEntropyLoss
 from nnunet.utilities.tensor_utilities import sum_tensor
 from torch import nn
 from torch.autograd import Variable
@@ -110,7 +110,7 @@ class GDiceLoss(nn.Module):
             softmax_output = self.apply_nonlin(net_output)
     
         # copy from https://github.com/LIVIAETS/surface-loss/blob/108bd9892adca476e6cdf424124bc6268707498e/losses.py#L29
-        w: torch.Tensor = 1 / ((einsum("bcxyz->bc", y_onehot).type(torch.float32) + 1e-10))**2
+        w: torch.Tensor = 1 / (einsum("bcxyz->bc", y_onehot).type(torch.float32) + 1e-10)
         intersection: torch.Tensor = w * einsum("bcxyz, bcxyz->bc", softmax_output, y_onehot)
         union: torch.Tensor = w * (einsum("bcxyz->bc", softmax_output) + einsum("bcxyz->bc", y_onehot))
         divided: torch.Tensor = 1 - 2 * (einsum("bc->b", intersection) + self.smooth) / (einsum("bc->b", union) + self.smooth)
@@ -475,16 +475,23 @@ class ExpLog_loss(nn.Module):
     paper: 3D Segmentation with Exponential Logarithmic Loss for Highly Unbalanced Object Sizes
     https://arxiv.org/pdf/1809.00076.pdf
     """
-    def __init__(self, soft_dice_kwargs, ce_kwargs, gamma=0.3):
+    def __init__(self, soft_dice_kwargs, wce_kwargs, gamma=0.3):
         super(ExpLog_loss, self).__init__()
-        self.ce = CrossentropyND(**ce_kwargs)
+        self.wce = WeightedCrossEntropyLoss(**wce_kwargs)
         self.dc = SoftDiceLoss(apply_nonlin=softmax_helper, **soft_dice_kwargs)
         self.gamma = gamma
 
     def forward(self, net_output, target):
         dc_loss = -self.dc(net_output, target) # weight=0.8
-        ce_loss = self.ce(net_output, target) # weight=0.2
-        explog_loss = 0.8*torch.pow(-torch.log(dc_loss), self.gamma) + 0.2*torch.pow(-torch.log(ce_loss), self.gamma)
+        wce_loss = self.wce(net_output, target) # weight=0.2
+        # with torch.no_grad():
+        #     print('dc loss:', dc_loss.cpu().numpy(), 'ce loss:', ce_loss.cpu().numpy())
+        #     a = torch.pow(-torch.log(torch.clamp(dc_loss, 1e-6)), self.gamma)
+        #     b = torch.pow(-torch.log(torch.clamp(ce_loss, 1e-6)), self.gamma)
+        #     print('ExpLog dc loss:', a.cpu().numpy(), 'ExpLogce loss:', b.cpu().numpy())
+        #     print('*'*20)
+        explog_loss = 0.8*torch.pow(-torch.log(torch.clamp(dc_loss, 1e-6)), self.gamma) + \
+            0.2*wce_loss
 
         return explog_loss
 
