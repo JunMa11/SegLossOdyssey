@@ -188,6 +188,7 @@ class SSLoss(nn.Module):
         """
         Sensitivity-Specifity loss
         paper: http://www.rogertam.ca/Brosch_MICCAI_2015.pdf
+        tf code: https://github.com/NifTK/NiftyNet/blob/df0f86733357fdc92bbc191c8fec0dcf49aa5499/niftynet/layer/loss_segmentation.py#L392
         """
         super(SSLoss, self).__init__()
 
@@ -248,7 +249,7 @@ class SoftDiceLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
         """
-
+        paper: https://arxiv.org/pdf/1606.04797.pdf
         """
         super(SoftDiceLoss, self).__init__()
 
@@ -363,6 +364,22 @@ class TverskyLoss(nn.Module):
 
         return -tversky
 
+class FocalTversky_loss(nn.Module):
+    """
+    paper: https://arxiv.org/pdf/1810.07842.pdf
+    author code: https://github.com/nabsabraham/focal-tversky-unet/blob/347d39117c24540400dfe80d106d2fb06d2b99e1/losses.py#L65
+    """
+    def __init__(self, tversky_kwargs, gamma=0.75):
+        super(FocalTversky_loss, self).__init__()
+        self.gamma = gamma
+        self.tversky = TverskyLoss(**tversky_kwargs)
+
+    def forward(self, net_output, target):
+        tversky_loss = 1 + self.tversky(net_output, target) # = 1-tversky(net_output, target)
+        focal_tversky = torch.pow(tversky_loss, self.gamma)
+        return focal_tversky
+
+
 class AsymLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
@@ -419,6 +436,9 @@ class DC_and_CE_loss(nn.Module):
         return result
 
 class PenaltyGDiceLoss(nn.Module):
+    """
+    paper: https://openreview.net/forum?id=H1lTh8unKN
+    """
     def __init__(self, gdice_kwargs):
         super(PenaltyGDiceLoss, self).__init__()
         self.k = 2.5
@@ -447,3 +467,27 @@ class DC_and_topk_loss(nn.Module):
         else:
             raise NotImplementedError("nah son") # reserved for other stuff (later?)
         return result
+
+
+
+class ExpLog_loss(nn.Module):
+    """
+    paper: 3D Segmentation with Exponential Logarithmic Loss for Highly Unbalanced Object Sizes
+    https://arxiv.org/pdf/1809.00076.pdf
+    """
+    def __init__(self, soft_dice_kwargs, ce_kwargs, gamma=0.3):
+        super(ExpLog_loss, self).__init__()
+        self.ce = CrossentropyND(**ce_kwargs)
+        self.dc = SoftDiceLoss(apply_nonlin=softmax_helper, **soft_dice_kwargs)
+        self.gamma = gamma
+
+    def forward(self, net_output, target):
+        dc_loss = -self.dc(net_output, target) # weight=0.8
+        ce_loss = self.ce(net_output, target) # weight=0.2
+        explog_loss = 0.8*torch.pow(-torch.log(dc_loss), self.gamma) + 0.2*torch.pow(-torch.log(ce_loss), self.gamma)
+
+        return explog_loss
+
+
+
+
