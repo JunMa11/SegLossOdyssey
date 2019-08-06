@@ -4,7 +4,7 @@ A collection of loss functions for medical image segmentation
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
 |201906|Xu Chen|Learning **Active Contour Models** for Medical Image Segmentation [(paper)](http://openaccess.thecvf.com/content_CVPR_2019/papers/Chen_Learning_Active_Contour_Models_for_Medical_Image_Segmentation_CVPR_2019_paper.pdf) [(code)](https://github.com/xuuuuuuchen/Active-Contour-Loss/blob/master/Active-Contour-Loss.py)|CVPR 2019|
-|20190422|Davood Karimi|Reducing the **Hausdorff Distance** in Medical Image Segmentation with Convolutional Neural Networks [(paper)](https://arxiv.org/abs/1904.10030v1#)|arxiv|
+|20190422|Davood Karimi|Reducing the **Hausdorff Distance** in Medical Image Segmentation with Convolutional Neural Networks [(paper)](https://arxiv.org/abs/1904.10030v1#)|[TMI 201907](https://ieeexplore.ieee.org/document/8767031)|
 |20190417|Francesco Caliva|**Distance Map Loss** Penalty Term for Semantic Segmentation [(paper)](https://openreview.net/forum?id=B1eIcvS45V)|[MIDL 2019](http://2019.midl.io/)|
 |20190411|Su Yang|Major Vessel Segmentation on X-ray Coronary Angiography using Deep Networks with a Novel **Penalty Loss Function** [(paper)](https://openreview.net/forum?id=H1lTh8unKN)|[MIDL 2019](http://2019.midl.io/)|
 |20190405|Boah Kim|Multiphase **Level-Set Loss** for Semi-Supervised and Unsupervised Segmentation with Deep Learning [(arxiv)](https://arxiv.org/abs/1904.02872)|TBD|
