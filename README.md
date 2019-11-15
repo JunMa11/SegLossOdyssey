@@ -3,7 +3,7 @@ A collection of loss functions for medical image segmentation
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
-|201910|Shuai Zhao|Correlation Maximized Structural Similarity Lossfor Semantic Segmentation [(paper)](https://arxiv.org/pdf/1910.08711.pdf)|TBD|
+|201910|Shuai Zhao|Correlation Maximized Structural Similarity Lossfor Semantic Segmentation [(paper)](https://arxiv.org/pdf/1910.08711.pdf) [(pytorch)](https://github.com/ZJULearning/RMI)|[NeurIPS 2019](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-32-2019)|
 |201908|Pierre-AntoineGanaye|Removing Segmentation Inconsistencies with Semi-Supervised Non-Adjacency Constraint [(paper)](https://www.sciencedirect.com/science/article/pii/S1361841519300866?dgcid=raven_sd_aip_email) [(official pytorch)](https://github.com/trypag/NonAdjLoss)|[Medical Image Analysis](https://www.sciencedirect.com/science/article/pii/S1361841519300866?dgcid=raven_sd_aip_email)|
 |201906|Xu Chen|Learning **Active Contour Models** for Medical Image Segmentation [(paper)](http://openaccess.thecvf.com/content_CVPR_2019/papers/Chen_Learning_Active_Contour_Models_for_Medical_Image_Segmentation_CVPR_2019_paper.pdf) [(official-keras)](https://github.com/xuuuuuuchen/Active-Contour-Loss/blob/master/Active-Contour-Loss.py)|CVPR 2019|
 |20190422|Davood Karimi|Reducing the **Hausdorff Distance** in Medical Image Segmentation with Convolutional Neural Networks [(paper)](https://arxiv.org/pdf/1904.10030v1.pdf)|[TMI 201907](https://ieeexplore.ieee.org/document/8767031)|
