@@ -3,6 +3,7 @@ A collection of loss functions for medical image segmentation
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|201912|Yuan Xue|Shape-Aware Organ Segmentation by Predicting Signed Distance Maps [(arxiv)](https://arxiv.org/abs/1912.03849)|AAAI 2020|
 |201912|JohannesC.Paetzold|clDice-a Novel Connectivity-Preserving Loss Function for Vessel Segmentation [(paper)](https://profs.etsmtl.ca/hlombaert/public/medneurips2019/27_CameraReadySubmission_cl_dice_neurips_med.pdf)|[MedNeurIPS2019](https://sites.google.com/view/med-neurips-2019)|
 |201910|Shuai Zhao|Correlation Maximized Structural Similarity Lossfor Semantic Segmentation [(paper)](https://arxiv.org/pdf/1910.08711.pdf) [(pytorch)](https://github.com/ZJULearning/RMI)|[NeurIPS 2019](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-32-2019)|
 |201908|Pierre-AntoineGanaye|Removing Segmentation Inconsistencies with Semi-Supervised Non-Adjacency Constraint [(paper)](https://www.sciencedirect.com/science/article/pii/S1361841519300866?dgcid=raven_sd_aip_email) [(official pytorch)](https://github.com/trypag/NonAdjLoss)|[Medical Image Analysis](https://www.sciencedirect.com/science/article/pii/S1361841519300866?dgcid=raven_sd_aip_email)|
