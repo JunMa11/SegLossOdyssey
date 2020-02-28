@@ -1,5 +1,6 @@
 # Loss functions for image segmentation
-A collection of loss functions for medical image segmentation
+![A collection of loss functions for medical image segmentation](https://github.com/JunMa11/SegLoss/blob/master/test/LossOverview.PNG)
+
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
