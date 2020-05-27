@@ -4,8 +4,9 @@
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|202004|J. H. Moltz|**Contour Dice coefficient (CDC) Loss:** Learning a Loss Function for Segmentation: A Feasibility Study|[ISBI](https://ieeexplore.ieee.org/abstract/document/9098557)|
 |202003|Suprosanna Shit|**clDice** -- a Topology-Preserving Loss Function for Tubular Structure Segmentation [(pytorch)](https://github.com/dmitrysarov/clDice)|[arXiv](https://arxiv.org/abs/2003.07311)|
-|202002|TBD|**Uncertainty-weighted Loss** Function for Medical Image Segmentation using Deep Convolutional Neural Network [(paper)](https://openreview.net/forum?id=cJnTwSNBdE)|[MIDL 2020](https://2020.midl.io/)|
+|202002|TBD|**Uncertainty-weighted Loss:** Function for Medical Image Segmentation using Deep Convolutional Neural Network [(paper)](https://openreview.net/forum?id=cJnTwSNBdE)|[MIDL 2020](https://2020.midl.io/)|
 |201912|Yuan Xue|Shape-Aware Organ Segmentation by Predicting Signed Distance Maps [(arxiv)](https://arxiv.org/abs/1912.03849)|AAAI 2020|
 |201912|Xiaoling Hu|Topology-Preserving Deep Image Segmentation [(paper)](https://papers.nips.cc/paper/8803-topology-preserving-deep-image-segmentation.pdf)|[NeurIPS](https://papers.nips.cc/paper/8803-topology-preserving-deep-image-segmentation)|
 |201912|JohannesC.Paetzold|clDice-a Novel Connectivity-Preserving Loss Function for Vessel Segmentation [(paper)](https://profs.etsmtl.ca/hlombaert/public/medneurips2019/27_CameraReadySubmission_cl_dice_neurips_med.pdf)|[MedNeurIPS2019](https://sites.google.com/view/med-neurips-2019)|
