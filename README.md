@@ -39,4 +39,18 @@
 |201505|[Olaf Ronneberger](https://scholar.google.ca/citations?user=7jrO1NwAAAAJ&hl=zh-CN&oi=sra)|**"Weighted cross entropy"** U-Net: Convolutional Networks for Biomedical Image Segmentation [(paper)](https://arxiv.org/abs/1505.04597)|[MICCAI 2015](https://link.springer.com/chapter/10.1007/978-3-319-24574-4_28)|
 |201309|[Gabriela Csurka](https://scholar.google.ca/citations?user=PXm1lPAAAAAJ&hl=zh-CN&oi=sra)|What is a good evaluation measure for semantic segmentation? [(paper)](http://www.bmva.org/bmvc/2013/Papers/paper0032/paper0032.pdf)|BMVA 2013|
 
-> Most of the corresponding code can be found [here](https://github.com/NifTK/NiftyNet/blob/dev/niftynet/layer/loss_segmentation.py).
+> Most of the corresponding tensorflow code can be found [here](https://github.com/NifTK/NiftyNet/blob/dev/niftynet/layer/loss_segmentation.py).
+
+
+## Including the following citation in your work would be highly appreciated.
+
+```
+@article{SegLossOdyssey,
+  title={Segmentation Loss Odyssey},
+  author={Ma Jun},
+  journal={arXiv preprint arXiv:2005.13449},
+  year={2020}
+}
+```
+
+
