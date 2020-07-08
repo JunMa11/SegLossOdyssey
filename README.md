@@ -4,6 +4,7 @@
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|20200706|Yuan Lan|An Elastic Interaction-Based Loss Function for Medical Image Segmentation [(pytorch)](https://github.com/charrywhite/elastic_interaction_based_loss) [(arXiv)](https://arxiv.org/abs/2007.02663)|MICCAI 2020|
 |20200615|Tom Eelbode|Optimization for Medical Image Segmentation: Theory and Practice when evaluating with Dice Score or Jaccard Index|[TMI](https://ieeexplore.ieee.org/document/9116807)|
 |20200605|Guotai Wang|**Noise-robust Dice loss:** A Noise-robust Framework for Automatic Segmentation of COVID-19 Pneumonia Lesions from CT Images [(pytorch)](https://github.com/HiLab-git/COPLE-Net)|[TMI](https://ieeexplore.ieee.org/document/9109297)|
 |202004|J. H. Moltz|**Contour Dice coefficient (CDC) Loss:** Learning a Loss Function for Segmentation: A Feasibility Study|[ISBI](https://ieeexplore.ieee.org/abstract/document/9098557)|
