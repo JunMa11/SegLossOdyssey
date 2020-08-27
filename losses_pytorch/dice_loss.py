@@ -7,6 +7,7 @@ from ND_Crossentropy import CrossentropyND, TopKLoss, WeightedCrossEntropyLoss
 from torch import nn
 from torch.autograd import Variable
 from torch import einsum
+import numpy as np
 
 def softmax_helper(x):
     # copy from: https://github.com/MIC-DKFZ/nnUNet/blob/master/nnunet/utilities/nd_softmax.py
