@@ -5,6 +5,7 @@
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
 |20200821|Nick Byrne|A persistent homology-based **topological loss** function for multi-class CNN segmentation of cardiac MRI [arxiv](https://arxiv.org/abs/2008.09585)|STACOM|
+|20200720|Boris Shirokikh|**Universal Loss Reweighting** to Balance Lesion Size Inequality in 3D Medical Image Segmentation [arxiv](https://arxiv.org/abs/2007.10033) [(pytorch)](https://arxiv.org/abs/2007.10033)|MICCAI 2020|
 |20200708|Gonglei Shi|**Marginal loss and exclusion loss** for partially supervised multi-organ segmentation [(arXiv)](https://arxiv.org/abs/2007.03868)|MedIA|
 |20200706|Yuan Lan|An **Elastic Interaction-Based Loss** Function for Medical Image Segmentation [(pytorch)](https://github.com/charrywhite/elastic_interaction_based_loss) [(arXiv)](https://arxiv.org/abs/2007.02663)|MICCAI 2020|
 |20200615|Tom Eelbode|Optimization for Medical Image Segmentation: Theory and Practice when evaluating with Dice Score or Jaccard Index|[TMI](https://ieeexplore.ieee.org/document/9116807)|
