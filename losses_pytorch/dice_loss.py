@@ -120,7 +120,7 @@ class GDiceLoss(nn.Module):
         w: torch.Tensor = 1 / (einsum("bcxyz->bc", y_onehot).type(torch.float32) + 1e-10)**2
         intersection: torch.Tensor = w * einsum("bcxyz, bcxyz->bc", softmax_output, y_onehot)
         union: torch.Tensor = w * (einsum("bcxyz->bc", softmax_output) + einsum("bcxyz->bc", y_onehot))
-        divided: torch.Tensor = 1 - 2 * (einsum("bc->b", intersection) + self.smooth) / (einsum("bc->b", union) + self.smooth)
+        divided: torch.Tensor =  - 2 * (einsum("bc->b", intersection) + self.smooth) / (einsum("bc->b", union) + self.smooth)
         gdc = divided.mean()
 
         return gdc
@@ -186,7 +186,7 @@ class GDiceLossV2(nn.Module):
 
         denominator = ((input + target).sum(-1) * class_weights).sum()
 
-        return 1. - 2. * intersect / denominator.clamp(min=self.smooth)
+        return  - 2. * intersect / denominator.clamp(min=self.smooth)
 
 
 class SSLoss(nn.Module):
