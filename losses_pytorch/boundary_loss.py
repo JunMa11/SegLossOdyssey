@@ -173,7 +173,7 @@ def compute_edts_forhdloss(segmentation):
 class HDDTBinaryLoss(nn.Module):
     def __init__(self):
         """
-        compute haudorff loss for binary segmentation
+        compute Hausdorff loss for binary segmentation
         https://arxiv.org/pdf/1904.10030v1.pdf        
         """
         super(HDDTBinaryLoss, self).__init__()
