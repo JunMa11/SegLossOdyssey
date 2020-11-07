@@ -231,11 +231,11 @@ class SSLoss(nn.Module):
             axes = list(range(2, len(shp_x)))
 
         if self.apply_nonlin is not None:
-            softmax_output = self.apply_nonlin(net_output)
+            net_output = self.apply_nonlin(net_output)
         
         # no object value
         bg_onehot = 1 - y_onehot
-        squared_error = (y_onehot - softmax_output)**2
+        squared_error = (y_onehot - net_output)**2
         specificity_part = sum_tensor(squared_error*y_onehot, axes)/(sum_tensor(y_onehot, axes)+self.smooth)
         sensitivity_part = sum_tensor(squared_error*bg_onehot, axes)/(sum_tensor(bg_onehot, axes)+self.smooth)
 
