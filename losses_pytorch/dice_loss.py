@@ -114,12 +114,12 @@ class GDiceLoss(nn.Module):
 
 
         if self.apply_nonlin is not None:
-            softmax_output = self.apply_nonlin(net_output)
+            net_output = self.apply_nonlin(net_output)
     
         # copy from https://github.com/LIVIAETS/surface-loss/blob/108bd9892adca476e6cdf424124bc6268707498e/losses.py#L29
         w: torch.Tensor = 1 / (einsum("bcxyz->bc", y_onehot).type(torch.float32) + 1e-10)**2
-        intersection: torch.Tensor = w * einsum("bcxyz, bcxyz->bc", softmax_output, y_onehot)
-        union: torch.Tensor = w * (einsum("bcxyz->bc", softmax_output) + einsum("bcxyz->bc", y_onehot))
+        intersection: torch.Tensor = w * einsum("bcxyz, bcxyz->bc", net_output, y_onehot)
+        union: torch.Tensor = w * (einsum("bcxyz->bc", net_output) + einsum("bcxyz->bc", y_onehot))
         divided: torch.Tensor =  - 2 * (einsum("bc->b", intersection) + self.smooth) / (einsum("bc->b", union) + self.smooth)
         gdc = divided.mean()
 
@@ -173,9 +173,9 @@ class GDiceLossV2(nn.Module):
 
 
         if self.apply_nonlin is not None:
-            softmax_output = self.apply_nonlin(net_output)
+            net_output = self.apply_nonlin(net_output)
 
-        input = flatten(softmax_output)
+        input = flatten(net_output)
         target = flatten(y_onehot)
         target = target.float()
         target_sum = target.sum(-1)
@@ -231,11 +231,11 @@ class SSLoss(nn.Module):
             axes = list(range(2, len(shp_x)))
 
         if self.apply_nonlin is not None:
-            softmax_output = self.apply_nonlin(net_output)
+            net_output = self.apply_nonlin(net_output)
         
         # no object value
         bg_onehot = 1 - y_onehot
-        squared_error = (y_onehot - softmax_output)**2
+        squared_error = (y_onehot - net_output)**2
         specificity_part = sum_tensor(squared_error*y_onehot, axes)/(sum_tensor(y_onehot, axes)+self.smooth)
         sensitivity_part = sum_tensor(squared_error*bg_onehot, axes)/(sum_tensor(bg_onehot, axes)+self.smooth)
 
