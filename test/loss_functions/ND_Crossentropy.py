@@ -17,6 +17,8 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 from scipy.ndimage import distance_transform_edt
 import numpy as np
+from nnunet.utilities.nd_softmax import softmax_helper
+from nnunet.utilities.tensor_utilities import sum_tensor
 
 
 class CrossentropyND(torch.nn.CrossEntropyLoss):
@@ -41,6 +43,64 @@ class CrossentropyND(torch.nn.CrossEntropyLoss):
         target = target.view(-1,)
 
         return super(CrossentropyND, self).forward(inp, target)
+
+class CrossentropyNDTopK(torch.nn.CrossEntropyLoss):
+    """
+    Network has to have NO NONLINEARITY!
+    """
+    def forward(self, inp, target):
+        target = target.long()
+        num_classes = inp.size()[1]
+
+        i0 = 1
+        i1 = 2
+
+        while i1 < len(inp.shape): # this is ugly but torch only allows to transpose two axes at once
+            inp = inp.transpose(i0, i1)
+            i0 += 1
+            i1 += 1
+
+        inp = inp.contiguous()
+        inp = inp.view(-1, num_classes)
+        with torch.no_grad():
+            prob = torch.softmax(inp, -1)
+
+        target = target.view(-1,)
+
+        return super(CrossentropyND, self).forward(inp, target)
+
+
+class TopKThreshold(CrossentropyND):
+    """
+    Network has to have NO LINEARITY!
+    """
+    def __init__(self, weight=None, ignore_index=-100, threshold=None):
+        self.threshold = threshold
+        super(TopKThreshold, self).__init__(weight, False, ignore_index, reduce=False)
+
+    def forward(self, inp, target):
+        target = target[:, 0].long()
+        res = super(TopKThreshold, self).forward(inp, target)
+        with torch.no_grad():
+            prob = softmax_helper(inp)
+            num_classes = inp.size()[1]
+            i0 = 1
+            i1 = 2
+
+            while i1 < len(prob.shape): # this is ugly but torch only allows to transpose two axes at once
+                prob = prob.transpose(i0, i1)
+                i0 += 1
+                i1 += 1
+
+            prob = prob.contiguous()
+            prob = prob.view(-1, num_classes)
+            prob, _ = torch.max(prob,-1)
+
+        # print('res.shape:', res.shape, 'inp.shape:', inp.shape, 'prob.shape:', prob.shape)
+        res = res[prob<self.threshold]
+        return res.mean()
+
+
 
 
 class WeightedCrossEntropyLoss(torch.nn.CrossEntropyLoss):
@@ -161,7 +221,7 @@ def compute_edts_forPenalizedLoss(GT):
         res[i] = pos_edt/np.max(pos_edt) + neg_edt/np.max(neg_edt)
     return res
 
-class DisPenalizedCE(torch.nn.Module):
+class DistPenalizedCE(torch.nn.Module):
     """
     Only for binary 3D segmentation
 
