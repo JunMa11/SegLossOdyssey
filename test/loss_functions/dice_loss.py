@@ -250,7 +250,7 @@ class SoftDiceLoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
         """
-        paper: https://arxiv.org/pdf/1606.04797.pdf
+        Drozdzal et al. https://arxiv.org/abs/1608.04117
         """
         super(SoftDiceLoss, self).__init__()
 
@@ -284,6 +284,78 @@ class SoftDiceLoss(nn.Module):
 
         return -dc
 
+def gt2onehot(net_output, gt, axes=None):
+    """
+    net_output must be (b, c, x, y(, z)))
+    gt must be a label map (shape (b, 1, x, y(, z)) OR shape (b, x, y(, z))) or one hot encoding (b, c, x, y(, z))
+    if mask is provided it must have shape (b, 1, x, y(, z)))
+    :param net_output:
+    :param gt:
+    :param axes:
+    :return:
+    """
+    if axes is None:
+        axes = tuple(range(2, len(net_output.size())))
+
+    shp_x = net_output.shape
+    shp_y = gt.shape
+
+    with torch.no_grad():
+        if len(shp_x) != len(shp_y):
+            gt = gt.view((shp_y[0], 1, *shp_y[1:]))
+
+        if all([i == j for i, j in zip(net_output.shape, gt.shape)]):
+            # if this is the case then gt is probably already a one hot encoding
+            y_onehot = gt
+        else:
+            gt = gt.long()
+            y_onehot = torch.zeros(shp_x)
+            if net_output.device.type == "cuda":
+                y_onehot = y_onehot.cuda(net_output.device.index)
+            y_onehot.scatter_(1, gt, 1)
+
+    return y_onehot
+
+class SoftDiceLossV2(nn.Module):
+    def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.):
+        """
+        paper: Milletari et al. https://arxiv.org/abs/1606.04797
+        """
+        super(SoftDiceLossV2, self).__init__()
+
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+
+    def forward(self, x, y):
+        shp_x = x.shape
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            net_output = self.apply_nonlin(x) # (b,c,x,y,z)
+
+        gt_onehot = gt2onehot(net_output, y, axes) # (b,c,x,y,z)
+        
+        intersection = sum_tensor(net_output * gt_onehot, axes, keepdim=False)
+        ground_o = sum_tensor(gt_onehot**2, axes, keepdim=False) 
+        pred_o = sum_tensor(net_output**2, axes, keepdim=False) 
+        dc = 2.0 * (intersection + self.smooth) / (ground_o + pred_o + self.smooth) 
+
+        if not self.do_bg:
+            if self.batch_dice:
+                dc = dc[1:]
+            else:
+                dc = dc[:, 1:]
+        dc = dc.mean()
+
+        return - dc
+
+    
 class IoULoss(nn.Module):
     def __init__(self, apply_nonlin=None, batch_dice=False, do_bg=True, smooth=1.,
                  square=False):
