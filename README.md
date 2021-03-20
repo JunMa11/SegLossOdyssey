@@ -1,10 +1,25 @@
 # Loss functions for image segmentation
 ![A collection of loss functions for medical image segmentation](https://github.com/JunMa11/SegLoss/blob/master/test/LossOverview.PNG)
 
+```
+@article{LossOdyssey,
+title = {Loss Odyssey in Medical Image Segmentation},
+journal = {Medical Image Analysis},
+pages = {102035},
+year = {2021},
+author = {Jun Ma and Jianan Chen and Matthew Ng and Rui Huang and Yu Li and Chen Li and Xiaoping Yang and Anne L. Martel}
+doi = {https://doi.org/10.1016/j.media.2021.102035},
+}
+```
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
-|20200929|Stefan Gerl|A Distance-Based Loss for Smooth and Continuous Skin Layer Segmentation in Optoacoustic Images|[MICCAI 2020](https://link.springer.com/chapter/10.1007%2F978-3-030-59725-2_30)|
+|20210211|Hoel Kervadec|Beyond pixel-wise supervision: semantic segmentation with higher-order shape descriptors|[Submitted to MIDL 2021](https://openreview.net/forum?id=nqe6e0oJ_fL)|
+|20210210|Rosana EL Jurdi|A Surprisingly Effective **Perimeter-based Loss** for Medical Image Segmentation|[Submitted to MIDL 2021](https://openreview.net/forum?id=NDEmtyb4cXu)|
+|20201222|Zeju Li|Analyzing Overfitting Under Class Imbalance in Neural Networks for Image Segmentation|[TMI](https://ieeexplore.ieee.org/document/9302891)|
+|20210129|Nick Byrne|A Persistent Homology-Based **Topological Loss** Function for Multi-class CNN Segmentation of Cardiac MRI [arxiv](https://arxiv.org/abs/2008.09585)| [STACOM 2020](https://link.springer.com/chapter/10.1007/978-3-030-68107-4_1)|
+|20201019|Hyunseok Seo|Closing the Gap Between Deep Neural Network Modeling and Biomedical Decision-Making Metrics in Segmentation via **Adaptive Loss** Functions|[TMI](https://ieeexplore.ieee.org/document/9229101)|
+|20200929|Stefan Gerl|A **Distance-Based Loss** for Smooth and Continuous Skin Layer Segmentation in Optoacoustic Images|[MICCAI 2020](https://link.springer.com/chapter/10.1007%2F978-3-030-59725-2_30)|
 |20200821|Nick Byrne|A persistent homology-based **topological loss** function for multi-class CNN segmentation of cardiac MRI [arxiv](https://arxiv.org/abs/2008.09585)|STACOM|
 |20200720|Boris Shirokikh|**Universal Loss Reweighting** to Balance Lesion Size Inequality in 3D Medical Image Segmentation [arxiv](https://arxiv.org/abs/2007.10033) [(pytorch)](https://arxiv.org/abs/2007.10033)|MICCAI 2020|
 |20200708|Gonglei Shi|**Marginal loss and exclusion loss** for partially supervised multi-organ segmentation [(arXiv)](https://arxiv.org/abs/2007.03868)|MedIA|
@@ -48,17 +63,5 @@
 |201309|[Gabriela Csurka](https://scholar.google.ca/citations?user=PXm1lPAAAAAJ&hl=zh-CN&oi=sra)|What is a good evaluation measure for semantic segmentation? [(paper)](http://www.bmva.org/bmvc/2013/Papers/paper0032/paper0032.pdf)|BMVA 2013|
 
 > Most of the corresponding tensorflow code can be found [here](https://github.com/NifTK/NiftyNet/blob/dev/niftynet/layer/loss_segmentation.py).
-
-
-## Including the following [citation](https://arxiv.org/abs/2005.13449) in your work would be highly appreciated.
-
-```
-@article{SegLossOdyssey,
-  title={Segmentation Loss Odyssey},
-  author={Ma Jun},
-  journal={arXiv preprint arXiv:2005.13449},
-  year={2020}
-}
-```
 
 
