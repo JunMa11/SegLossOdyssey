@@ -1,6 +1,6 @@
 ## Usage Instructions
 
-All the loss functions have been tested with [nnUNet](https://github.com/MIC-DKFZ/nnUNet).
+All the loss functions have been tested with [nnUNet V1](https://github.com/MIC-DKFZ/nnUNet).
 
 0. Prerequisites: install [nnUNet](https://github.com/MIC-DKFZ/nnUNet).
 1. Download the loss functions: `git clone https://github.com/JunMa11/SegLoss.git`
@@ -8,9 +8,18 @@ All the loss functions have been tested with [nnUNet](https://github.com/MIC-DKF
 3. To Train your model, replacing `nnUNetTrainer` by the new trainer. e.g., if you want to train UNet with Dice loss, run:
 > python run/run_training.py 3d_fullres nnUNetTrainer_Dice TaskXX_MY_DATASET FOLD --ndet
 
+## Datasets
+
+- Liver: [LiTS](https://competitions.codalab.org/competitions/17094)
+- Liver Tumor: [LiTS](https://competitions.codalab.org/competitions/17094) + [MSD-Task08](http://medicaldecathlon.com/)
+- Pancreas: [NIH-Pancreas](https://wiki.cancerimagingarchive.net/display/Public/Pancreas-CT) + [MSD-Task07](http://medicaldecathlon.com/)
+- Multi-organ: [Zenodo](http://doi.org/10.5281/zenodo.1169361)
 
 
 ## Results
+
+> Segmentation results (`nii files`) will be released in a week.
+
 |     Loss     | Liver-DSC | Liver-NSD | Liver Tumor-DSC | Liver Tumor-NSD | Pancreas-DSC | Pancreas-NSD | Multi-organ-DSC | Multi-organ-NSD |
 |:------------:|:---------:|:---------:|:---------------:|:---------------:|:------------:|:------------:|:---------------:|:---------------:|
 | Asym         |   0.9315  |   0.6905  |      0.6134     |      0.4114     |    0.8234    |    0.6239    |      0.7526     |      0.6088     |
@@ -33,4 +42,10 @@ All the loss functions have been tested with [nnUNet](https://github.com/MIC-DKF
 | TopK         |   0.6924  |   0.1073  |      0.5995     |      0.4051     |    0.8406    |    0.6709    |      0.8527     |      0.7323     |
 | Tversky      |   0.9390  |   0.6991  |      0.6120     |      0.4045     |    0.8260    |    0.6249    |      0.8371     |      0.6787     |
 | WCE          |   0.8284  |   0.2665  |      0.2697     |      0.0314     |    0.4744    |    0.0496    |      0.6904     |      0.2335     |
+
+
+
+## To Do
+
+- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) because the latest version is more popular
 
