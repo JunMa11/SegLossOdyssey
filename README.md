@@ -1,6 +1,7 @@
 # Loss functions for image segmentation
 ![A collection of loss functions for medical image segmentation](https://github.com/JunMa11/SegLoss/blob/master/test/LossOverview.PNG)
 
+
 ```
 @article{LossOdyssey,
 title = {Loss Odyssey in Medical Image Segmentation},
@@ -11,6 +12,11 @@ author = {Jun Ma and Jianan Chen and Matthew Ng and Rui Huang and Yu Li and Chen
 doi = {https://doi.org/10.1016/j.media.2021.102035},
 }
 ```
+
+**Take-home message: compound loss functions are the most robust losses, especially for the highly imbalanced segmentation tasks.**
+
+> Some recent side evidence: [the winner](https://link.springer.com/chapter/10.1007/978-3-030-67194-5_4) in MICCAI 2020 [HECKTOR](http://www.aicrowd.com/challenges/hecktor) Challenge used DiceFocal loss; the [winner and runner-up](https://arxiv.org/pdf/2101.00232) in MICCAI 2020 [ADAM](http://adam.isi.uu.nl/) Challenge used DiceTopK loss.
+
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
