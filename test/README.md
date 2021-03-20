@@ -16,9 +16,10 @@ All the loss functions have been tested with [nnUNet V1](https://github.com/MIC-
 - Multi-organ: [Zenodo](http://doi.org/10.5281/zenodo.1169361)
 
 
-## Results
+## Results 
 
-> Segmentation results (`nii files`) will be released in a week.
+> [Download](https://zenodo.org/record/4624843) associated segmentation results
+
 
 |     Loss     | Liver-DSC | Liver-NSD | Liver Tumor-DSC | Liver Tumor-NSD | Pancreas-DSC | Pancreas-NSD | Multi-organ-DSC | Multi-organ-NSD |
 |:------------:|:---------:|:---------:|:---------------:|:---------------:|:------------:|:------------:|:---------------:|:---------------:|
@@ -47,5 +48,5 @@ All the loss functions have been tested with [nnUNet V1](https://github.com/MIC-
 
 ## To Do
 
-- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) because the latest version is more popular
+- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) because the latest version is more popular (and also better performance).
 
