@@ -20,6 +20,7 @@ doi = {https://doi.org/10.1016/j.media.2021.102035},
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|20210318|Xiaoling Hu|Topology-Aware Segmentation Using Discrete Morse Theory [arxiv](https://arxiv.org/abs/2103.09992v1)|[ICLR 2021](https://openreview.net/forum?id=LGgdb4TS4Z)|
 |20210211|Hoel Kervadec|Beyond pixel-wise supervision: semantic segmentation with higher-order shape descriptors|[Submitted to MIDL 2021](https://openreview.net/forum?id=nqe6e0oJ_fL)|
 |20210210|Rosana EL Jurdi|A Surprisingly Effective **Perimeter-based Loss** for Medical Image Segmentation|[Submitted to MIDL 2021](https://openreview.net/forum?id=NDEmtyb4cXu)|
 |20201222|Zeju Li|Analyzing Overfitting Under Class Imbalance in Neural Networks for Image Segmentation|[TMI](https://ieeexplore.ieee.org/document/9302891)|
