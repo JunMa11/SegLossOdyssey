@@ -20,6 +20,7 @@ doi = {https://doi.org/10.1016/j.media.2021.102035},
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|20210330|Suprosanna Shit and Johannes C. Paetzold|**clDice** - a Novel Topology-Preserving Loss Function for Tubular Structure Segmentation [(keras and pytorch)](https://github.com/jocpae/clDice)|[CVPR 2021](https://arxiv.org/abs/2003.07311)|
 |20210318|Xiaoling Hu|Topology-Aware Segmentation Using Discrete Morse Theory [arxiv](https://arxiv.org/abs/2103.09992v1)|[ICLR 2021](https://openreview.net/forum?id=LGgdb4TS4Z)|
 |20210211|Hoel Kervadec|Beyond pixel-wise supervision: semantic segmentation with higher-order shape descriptors|[Submitted to MIDL 2021](https://openreview.net/forum?id=nqe6e0oJ_fL)|
 |20210210|Rosana EL Jurdi|A Surprisingly Effective **Perimeter-based Loss** for Medical Image Segmentation|[Submitted to MIDL 2021](https://openreview.net/forum?id=NDEmtyb4cXu)|
@@ -34,11 +35,8 @@ doi = {https://doi.org/10.1016/j.media.2021.102035},
 |20200615|Tom Eelbode|Optimization for Medical Image Segmentation: Theory and Practice when evaluating with Dice Score or Jaccard Index|[TMI](https://ieeexplore.ieee.org/document/9116807)|
 |20200605|Guotai Wang|**Noise-robust Dice loss:** A Noise-robust Framework for Automatic Segmentation of COVID-19 Pneumonia Lesions from CT Images [(pytorch)](https://github.com/HiLab-git/COPLE-Net)|[TMI](https://ieeexplore.ieee.org/document/9109297)|
 |202004|J. H. Moltz|**Contour Dice coefficient (CDC) Loss:** Learning a Loss Function for Segmentation: A Feasibility Study|[ISBI](https://ieeexplore.ieee.org/abstract/document/9098557)|
-|202003|Suprosanna Shit|**clDice** -- a Topology-Preserving Loss Function for Tubular Structure Segmentation [(pytorch)](https://github.com/dmitrysarov/clDice)|[arXiv](https://arxiv.org/abs/2003.07311)|
-|202002|TBD|**Uncertainty-weighted Loss:** Function for Medical Image Segmentation using Deep Convolutional Neural Network [(paper)](https://openreview.net/forum?id=cJnTwSNBdE)|[MIDL 2020](https://2020.midl.io/)|
 |201912|Yuan Xue|Shape-Aware Organ Segmentation by Predicting Signed Distance Maps [(arxiv)](https://arxiv.org/abs/1912.03849) [(pytorch)](https://github.com/JunMa11/SegWithDistMap/blob/master/code/train_LA_AAAISDF.py)|AAAI 2020|
 |201912|Xiaoling Hu|**Topology-Preserving** Deep Image Segmentation [(paper)](https://papers.nips.cc/paper/8803-topology-preserving-deep-image-segmentation.pdf) [(pytorch)](https://github.com/HuXiaoling/TopoLoss)|[NeurIPS](https://papers.nips.cc/paper/8803-topology-preserving-deep-image-segmentation)|
-|201912|JohannesC.Paetzold|clDice-a Novel Connectivity-Preserving Loss Function for Vessel Segmentation [(paper)](https://profs.etsmtl.ca/hlombaert/public/medneurips2019/27_CameraReadySubmission_cl_dice_neurips_med.pdf)|[MedNeurIPS2019](https://sites.google.com/view/med-neurips-2019)|
 |201910|Shuai Zhao|Region Mutual Information Loss for Semantic Segmentation [(paper)](https://papers.nips.cc/paper/9291-region-mutual-information-loss-for-semantic-segmentation) [(pytorch)](https://github.com/ZJULearning/RMI)|[NeurIPS 2019](https://papers.nips.cc/paper/9291-region-mutual-information-loss-for-semantic-segmentation)|
 |201910|Shuai Zhao|Correlation Maximized Structural Similarity Loss for Semantic Segmentation [(paper)](https://arxiv.org/abs/1910.08711)|arxiv|
 |201908|Pierre-AntoineGanaye|Removing Segmentation Inconsistencies with Semi-Supervised Non-Adjacency Constraint [(paper)](https://www.sciencedirect.com/science/article/pii/S1361841519300866?dgcid=raven_sd_aip_email) [(official pytorch)](https://github.com/trypag/NonAdjLoss)|[Medical Image Analysis](https://www.sciencedirect.com/science/article/pii/S1361841519300866?dgcid=raven_sd_aip_email)|
