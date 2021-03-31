@@ -170,57 +170,6 @@ def compute_edts_forhdloss(segmentation):
     return res
 
 
-class HDDTBinaryLoss(nn.Module):
-    def __init__(self):
-        """
-        compute Hausdorff loss for binary segmentation
-        https://arxiv.org/pdf/1904.10030v1.pdf        
-        """
-        super(HDDTBinaryLoss, self).__init__()
-
-
-    def forward(self, net_output, target):
-        """
-        net_output: (batch_size, 2, x,y,z)
-        target: ground truth, shape: (batch_size, 1, x,y,z)
-        """
-        net_output = softmax_helper(net_output)
-        pc = net_output[:, 1, ...].type(torch.float32)
-        gt = target[:,0, ...].type(torch.float32)
-        with torch.no_grad():
-            pc_dist = compute_edts_forhdloss(pc.cpu().numpy()>0.5)
-            gt_dist = compute_edts_forhdloss(gt.cpu().numpy()>0.5)
-        # print('pc_dist.shape: ', pc_dist.shape)
-        
-        pred_error = (gt - pc)**2
-        dist = pc_dist**2 + gt_dist**2 # \alpha=2 in eq(8)
-
-        dist = torch.from_numpy(dist)
-        if dist.device != pred_error.device:
-            dist = dist.to(pred_error.device).type(torch.float32)
-
-        multipled = torch.einsum("bxyz,bxyz->bxyz", pred_error, dist)
-        hd_loss = multipled.mean()
-
-        return hd_loss
-
-
-
-class DC_and_HDBinary_loss(nn.Module):
-    def __init__(self, soft_dice_kwargs, hd_kwargs, aggregate="sum"):
-        super(DC_and_HDBinary_loss, self).__init__()
-        self.aggregate = aggregate
-        self.dc = SoftDiceLoss(apply_nonlin=softmax_helper, **soft_dice_kwargs)
-        self.hd = HDDTBinaryLoss(**hd_kwargs)
-
-    def forward(self, net_output, target):
-        dc_loss = self.dc(net_output, target)
-        hd_loss = self.hd(net_output, target)
-        if self.aggregate == "sum":
-            result = dc_loss + hd_loss
-        else:
-            raise NotImplementedError("nah son")
-        return result    
 
 
 def compute_edts_forPenalizedLoss(GT):
