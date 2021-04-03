@@ -6,10 +6,12 @@
 @article{LossOdyssey,
 title = {Loss Odyssey in Medical Image Segmentation},
 journal = {Medical Image Analysis},
+volume = {71},
 pages = {102035},
 year = {2021},
 author = {Jun Ma and Jianan Chen and Matthew Ng and Rui Huang and Yu Li and Chen Li and Xiaoping Yang and Anne L. Martel}
 doi = {https://doi.org/10.1016/j.media.2021.102035},
+url = {https://www.sciencedirect.com/science/article/pii/S1361841521000815}
 }
 ```
 
