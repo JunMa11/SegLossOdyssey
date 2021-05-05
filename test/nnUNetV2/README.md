@@ -1,6 +1,6 @@
 ## Usage Instructions
 
-All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](https://github.com/MIC-DKFZ/nnunet/blob/master/nnunet/training/network_training/nnUNetTrainer.py).
+All the loss functions have been tested with the nnUNetTrainerV2 in the latest [nnUNet](https://github.com/MIC-DKFZ/nnUNet).
 
 0. Prerequisites: install [nnUNet](https://github.com/MIC-DKFZ/nnUNet).
 1. Download the loss functions: `git clone https://github.com/JunMa11/SegLoss.git`
@@ -18,10 +18,6 @@ All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](ht
 ## Results 
 
 > In nnU-Net V2, deep supervision is added to the default U-Net. The optimizer is SGD with momentum rather than Adam.
-
-
-- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) under [deterministic training](https://github.com/MIC-DKFZ/nnUNet/blob/6b0805594bc95cd178798d3c1c5acd0e28cf21fa/nnunet/run/run_training.py#L44).
-
 
 The associated segmentation [results](https://zenodo.org/record/4738480) have been released.
 
