@@ -1,6 +1,6 @@
 ## Usage Instructions
 
-All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](https://github.com/MIC-DKFZ/nnUNet).
+All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](https://github.com/MIC-DKFZ/nnunet/blob/master/nnunet/training/network_training/nnUNetTrainer.py).
 
 0. Prerequisites: install [nnUNet](https://github.com/MIC-DKFZ/nnUNet).
 1. Download the loss functions: `git clone https://github.com/JunMa11/SegLoss.git`
@@ -48,9 +48,13 @@ All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](ht
 
 ## To Do
 
-- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) because the latest version is more popular (and has better performance).
+- [X] Evaluate commonly used plug-and-play loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) because the latest version is more popular (and has better performance).
 
 > In nnU-Net V2, deep supervision is added to the default U-Net. The optimizer is SGD with momentum rather than Adam.
+
+
+- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) under [deterministic training](https://github.com/MIC-DKFZ/nnUNet/blob/6b0805594bc95cd178798d3c1c5acd0e28cf21fa/nnunet/run/run_training.py#L44).
+
 
 The associated segmentation results will be released by 4.15.
 
@@ -58,7 +62,7 @@ The associated segmentation results will be released by 4.15.
 |------------|:--------------:|:--------------:|:------------:|:------------:|:--------------:|:--------------:|
 | CE         |     0.6415     |     0.4698     |    0.8338    |    0.6566    |     0.8570     |     0.7368     |
 | Dice       |     0.6200     |     0.4592     |    0.8399    |    0.6663    |     0.8577     |     0.7416     |
-| DiceCE     |     0.6185     |     0.4493     |    0.8410    |    0.6691    |     0.8626     |     0.7488     |
+| DiceCE     |     0.6281     |     0.4678     |    0.8410    |    0.6691    |     0.8626     |     0.7488     |
 | DiceFocal  |     0.6303     |     0.4705     |    0.8401    |    0.6691    |     0.8631     |     0.7501     |
 | DiceTopK10 |     0.6691     |     0.5095     |    0.8387    |    0.6661    |     0.8636     |     0.7483     |
 | TopK10     |     0.6512     |     0.4849     |    0.8383    |    0.6649    |     0.8560     |     0.7378     |
