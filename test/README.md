@@ -4,7 +4,7 @@ All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](ht
 
 0. Prerequisites: install [nnUNet](https://github.com/MIC-DKFZ/nnUNet).
 1. Download the loss functions: `git clone https://github.com/JunMa11/SegLoss.git`
-2. Copy `SegLoss/test/loss_functions` and `SegLoss/test/network_training` to `nnUNet/nnunet/training`
+2. Copy `SegLoss/test/nnUNetV1/loss_functions` and `SegLoss/test/nnUNetV1/network_training` to `nnUNet/nnunet/training`
 3. To Train your model, replacing `nnUNetTrainer` by the new trainer. e.g., if you want to train UNet with Dice loss, run:
 > python run/run_training.py 3d_fullres nnUNetTrainer_Dice TaskXX_MY_DATASET FOLD --ndet
 
@@ -48,15 +48,12 @@ All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](ht
 
 ## To Do
 
-- [X] Evaluate commonly used plug-and-play loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) because the latest version is more popular (and has better performance).
+- [X] Evaluate commonly used plug-and-play loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) on three label-imbalanced tasks (liver tumor, pancreas, multi-organ) because the latest version is more popular (and has better performance).
 
 > In nnU-Net V2, deep supervision is added to the default U-Net. The optimizer is SGD with momentum rather than Adam.
 
 
-- [ ] Evaluate commonly used loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) under [deterministic training](https://github.com/MIC-DKFZ/nnUNet/blob/6b0805594bc95cd178798d3c1c5acd0e28cf21fa/nnunet/run/run_training.py#L44).
-
-
-The associated segmentation results will be released by 4.15.
+The associated segmentation [results](https://zenodo.org/record/4738480) have been released.
 
 | Loss       | LiverTumor-DSC | LiverTumor-NSD | Pancreas-DSC | Pancreas-NSD | Multiorgan-DSC | Multiorgan-NSD |
 |------------|:--------------:|:--------------:|:------------:|:------------:|:--------------:|:--------------:|
@@ -67,5 +64,5 @@ The associated segmentation results will be released by 4.15.
 | DiceTopK10 |     0.6691     |     0.5095     |    0.8387    |    0.6661    |     0.8636     |     0.7483     |
 | TopK10     |     0.6512     |     0.4849     |    0.8383    |    0.6649    |     0.8560     |     0.7378     |
 
-
+- [ ] Evaluate the above loss functions with [nnU-Net V2](https://github.com/MIC-DKFZ/nnUNet) under [deterministic training](https://github.com/MIC-DKFZ/nnUNet/blob/6b0805594bc95cd178798d3c1c5acd0e28cf21fa/nnunet/run/run_training.py#L44).
 
