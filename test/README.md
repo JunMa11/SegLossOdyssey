@@ -11,10 +11,11 @@ All the loss functions have been tested with the nnUNetTrainer in [nnUNet V1](ht
 ## Datasets
 
 - Liver: [LiTS](https://competitions.codalab.org/competitions/17094)
-- Liver Tumor: [LiTS](https://competitions.codalab.org/competitions/17094) + [MSD-Task08](http://medicaldecathlon.com/)
-- Pancreas: [NIH-Pancreas](https://wiki.cancerimagingarchive.net/display/Public/Pancreas-CT) + [MSD-Task07](http://medicaldecathlon.com/)
-- Multi-organ: [Zenodo](http://doi.org/10.5281/zenodo.1169361)
+- Liver Tumor: [LiTS](https://competitions.codalab.org/competitions/17094) + [MSD-Task08](http://medicaldecathlon.com/);  [Baidu Net Disk](https://pan.baidu.com/s/1dZIzRRmkpNgH4y9Ve3fD2g) (PW: 2021)
+- Pancreas: [NIH-Pancreas](https://wiki.cancerimagingarchive.net/display/Public/Pancreas-CT) + [MSD-Task07](http://medicaldecathlon.com/);  [Baidu Net Disk](https://pan.baidu.com/s/1zHkra-6zq0-cFYqz4bC1Fw) (PW: 2021)
+- Multi-organ: [Zenodo](http://doi.org/10.5281/zenodo.1169361); [Baidu Net Disk](https://pan.baidu.com/s/1UDH5nJLRx6sbteQuMilIdQ)  (PW: 2021)
 
+> Many loss functions can achieve great performance on liver segmentation. Thus, we recommend paying more attention to the other three tasks.
 
 ## Results 
 
