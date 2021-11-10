@@ -22,6 +22,7 @@ url = {https://www.sciencedirect.com/science/article/pii/S1361841521000815}
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|20211109|Litao Yu|Distribution-Aware Margin Calibration for Semantic Segmentation in Images [(pytorch)](https://github.com/yutao1008/margin_calibration) | [IJCV](https://link.springer.com/article/10.1007%2Fs11263-021-01533-0)|
 |20211013|Pei Wang|Relax and Focus on Brain Tumor Segmentation | [MedIA](https://www.sciencedirect.com/science/article/abs/pii/S1361841521003042)|
 |20210418|Bingyuan Liu|The hidden label-marginal biases of segmentation losses [(pytorch)](https://github.com/by-liu/SegLossBias) | [arxiv](https://arxiv.org/abs/2104.08717)|
 |20210330|Suprosanna Shit and Johannes C. Paetzold|**clDice** - a Novel Topology-Preserving Loss Function for Tubular Structure Segmentation [(keras and pytorch)](https://github.com/jocpae/clDice)|[CVPR 2021](https://arxiv.org/abs/2003.07311)|
