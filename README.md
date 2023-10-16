@@ -22,7 +22,10 @@ url = {https://www.sciencedirect.com/science/article/pii/S1361841521000815}
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
-|20220517|[Florian Kofler](https://scholar.google.com.hk/citations?user=1ZLJyJ4AAAAJ&hl=en&oi=sra)|**blob loss**: instance imbalance aware loss functions for semantic segmentation [(pytorch)](https://github.com/neuronflow/blob_loss/) |[arxiv](https://arxiv.org/abs/2205.08209)|
+|2023 MICCAI|[Alvaro Gonzalez-Jimenez](https://scholar.google.com.hk/citations?user=LbtKzVgAAAAJ&hl=en&oi=sra)|Robust T-Loss for Medical Image Segmentation [(pytorch)](https://robust-tloss.github.io/)|[MICCAI23](https://doi.org/10.1007/978-3-031-43898-1_68)|
+|2023 MICCAI|[Zifu Wang](https://scholar.google.com.hk/citations?user=AFOk6rsAAAAJ&hl=en&oi=sra)|Dice Semimetric Losses: Optimizing the Dice Score with Soft Labels [(pytorch)](https://github.com/zifuwanggg/JDTLosses) |[MICCAI23](https://doi.org/10.1007/978-3-031-43898-1_46)|
+|2023 MICCAI|Fan Sun|Boundary Difference Over Union Loss For Medical Image Segmentation [(pytorch)](https://github.com/sunfan-bvb/BoundaryDoULoss) |[MICCAI23](https://doi.org/10.1007/978-3-031-43901-8_28)|
+|20220517|[Florian Kofler](https://scholar.google.com.hk/citations?user=1ZLJyJ4AAAAJ&hl=en&oi=sra)|**blob loss**: instance imbalance aware loss functions for semantic segmentation [(pytorch)](https://github.com/neuronflow/blob_loss/) |[IPMI23](https://arxiv.org/abs/2205.08209)|
 |20220426|Zhaoqi Len|**PolyLoss**: A Polynomial Expansion Perspective of Classification Loss Functions [(pytorch)](https://paperswithcode.com/paper/polyloss-a-polynomial-expansion-perspective-1)|[ICLR](https://openreview.net/forum?id=gSdSJoenupI)|
 |20211109|Litao Yu|Distribution-Aware Margin Calibration for Semantic Segmentation in Images [(pytorch)](https://github.com/yutao1008/margin_calibration) | [IJCV](https://link.springer.com/article/10.1007%2Fs11263-021-01533-0)|
 |20211013|Pei Wang|Relax and Focus on Brain Tumor Segmentation | [MedIA](https://www.sciencedirect.com/science/article/abs/pii/S1361841521003042)|
