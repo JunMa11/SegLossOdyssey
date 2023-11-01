@@ -22,6 +22,7 @@ url = {https://www.sciencedirect.com/science/article/pii/S1361841521000815}
 
 |Date|First Author|Title|Conference/Journal|
 |---|---|---|---|
+|20231101|[Bingyuan Liu](https://scholar.google.com.hk/citations?hl=en&user=jrWPhioAAAAJ&view_op=list_works)|Do we really need dice? The hidden region-size biases of segmentation losses [(pytorch)](https://github.com/by-liu/SegLossBias)|[MedIA](https://www.sciencedirect.com/science/article/pii/S136184152300275X)|
 |2023 MICCAI|[Alvaro Gonzalez-Jimenez](https://scholar.google.com.hk/citations?user=LbtKzVgAAAAJ&hl=en&oi=sra)|Robust T-Loss for Medical Image Segmentation [(pytorch)](https://robust-tloss.github.io/)|[MICCAI23](https://doi.org/10.1007/978-3-031-43898-1_68)|
 |2023 MICCAI|[Zifu Wang](https://scholar.google.com.hk/citations?user=AFOk6rsAAAAJ&hl=en&oi=sra)|Dice Semimetric Losses: Optimizing the Dice Score with Soft Labels [(pytorch)](https://github.com/zifuwanggg/JDTLosses) |[MICCAI23](https://doi.org/10.1007/978-3-031-43898-1_46)|
 |2023 MICCAI|Fan Sun|Boundary Difference Over Union Loss For Medical Image Segmentation [(pytorch)](https://github.com/sunfan-bvb/BoundaryDoULoss) |[MICCAI23](https://doi.org/10.1007/978-3-031-43901-8_28)|
